@@ -2,7 +2,7 @@ name: BedWars
 version: 1.0
 main: com.github.devil0414.bedwars.plugin.BedWarPlugin
 api-version: 1.16
-authors: [devil0414]
+authors: [devil0414, hs1008, devil0812]
 depend: [Tap, Kotlin, InvFX]
 commands:
   bw:
