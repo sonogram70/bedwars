@@ -39,11 +39,8 @@ class BedWarGameTask : BedWarTask {
             getPluginManager().registerEvents(BedWarListener(), instance)
             getScheduler().runTaskTimer(instance, IronScheduler(), 0L, 15L)
             getScheduler().runTaskTimer(instance, GoldScheduler(), 0L, 100L)
-            getScheduler().runTaskTimer(instance, DiamondScheduler(), 0L, 1200L)
-            getScheduler().runTaskTimer(instance, EmeraldScheduler(), 0L, 1800L)
-        }
-        if(CommandBW.red.count() == 0 && CommandBW.blue.count() == 0 && CommandBW.green.count() == 0 || CommandBW.blue.count() == 0 && CommandBW.green.count() == 0 && CommandBW.yellow.count() == 0 || CommandBW.red.count() == 0 && CommandBW.green.count() == 0 && CommandBW.yellow.count() == 0 || CommandBW.red.count() == 0 && CommandBW.blue.count() == 0 && CommandBW.yellow.count() == 0) {
-            gameStatus = false
+            getScheduler().runTaskTimer(instance, DiamondScheduler(), 0L, 20L)
+            getScheduler().runTaskTimer(instance, EmeraldScheduler(), 0L, 20L)
         }
         return if (gameStatus) this else BedWarResultTask()
     }

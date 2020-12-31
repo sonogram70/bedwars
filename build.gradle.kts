@@ -20,7 +20,7 @@ repositories {
 dependencies {
     compileOnly(kotlin("stdlib"))
     compileOnly("com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT")
-    implementation("com.github.noonmaru:tap:3.2.5")
+    compileOnly("com.github.noonmaru:tap:3.2.5")
     implementation("com.github.noonmaru:kommand:0.6.3")
     compileOnly("com.github.noonmaru:invfx:1.3.0")
 }

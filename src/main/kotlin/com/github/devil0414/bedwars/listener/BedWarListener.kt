@@ -8,8 +8,6 @@ import com.github.devil0414.bedwars.process.BedWarGame.Companion.redBed
 import com.github.devil0414.bedwars.process.BedWarGame.Companion.blueBed
 import com.github.devil0414.bedwars.process.BedWarGame.Companion.greenBed
 import com.github.devil0414.bedwars.process.BedWarGame.Companion.yellowBed
-import com.github.devil0414.bedwars.tasks.KillCountdown
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
@@ -21,7 +19,6 @@ import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.event.player.PlayerRespawnEvent
-import org.bukkit.inventory.ItemStack
 
 class BedWarListener : Listener {
     @EventHandler
@@ -105,6 +102,10 @@ class BedWarListener : Listener {
         for(player in CommandBW.red) {
             if(redBed) {
                 if(event.entity != player) return
+                event.entity.gameMode == GameMode.ADVENTURE
+                event.entity.allowFlight = true
+                event.entity.inventory.clear()
+                event.entity.isInvisible = true
             } else {
                 if(event.entity != player) return
                 event.entity.gameMode = GameMode.SPECTATOR
@@ -147,10 +148,9 @@ class BedWarListener : Listener {
     }
     @EventHandler
     fun onPlayerRevive(event: PlayerRespawnEvent) {
-        KillCountdown()
+        Bukkit.getScheduler().runTaskTimer(instance, KillCountdown(), 0L, 1L)
     }
     @EventHandler
     fun onPlayerRevivePost(event: PlayerPostRespawnEvent) {
-        KillCountdown()
     }
 }

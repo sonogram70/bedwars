@@ -3,6 +3,8 @@ package com.github.devil0414.bedwars.plugin
 import com.github.devil0414.bedwars.process.CommandBW
 import com.github.noonmaru.kommand.kommand
 import org.bukkit.plugin.java.JavaPlugin
+import com.github.noonmaru.tap.fake.FakeEntityServer
+import org.bukkit.Bukkit
 
 class BedWarPlugin : JavaPlugin() {
     companion object {
@@ -11,6 +13,9 @@ class BedWarPlugin : JavaPlugin() {
 
     override fun onEnable() {
         instance = this
+        setupCommands()
+    }
+    private fun setupCommands() {
         kommand {
             register("bw") {
                 CommandBW.register(this)
