@@ -1,8 +1,10 @@
 package com.github.devil0414.bedwars.process
 
 import com.github.devil0414.bedwars.plugin.BedWarPlugin
+import com.github.devil0414.bedwars.plugin.BedWarPlugin.Companion.instance
 import com.github.devil0414.bedwars.process.BedWarProcess.startProcess
 import com.github.devil0414.bedwars.process.BedWarProcess.stopProcess
+import com.github.devil0414.bedwars.utils.FakeEntityServ.fakeEntityServer
 import com.github.devil0414.bedwars.utils.ShopInventory
 import com.github.noonmaru.invfx.openWindow
 import com.github.noonmaru.kommand.KommandBuilder
@@ -21,12 +23,36 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.scoreboard.DisplaySlot
 
 internal object CommandBW {
     fun register(builder: KommandBuilder) {
         builder.apply {
             then("team") {
                 then("player" to PlayerArgument) {
+                    then("leave") {
+                        then("red") {
+                            executes {
+                                leavered(it.parseArgument("player"), it.sender)
+                            }
+                        }
+                        then("blue") {
+                            executes {
+                                leaveblue(it.parseArgument("player"), it.sender)
+                            }
+                        }
+                        then("green") {
+                            executes {
+                                leavegreen(it.parseArgument("player"), it.sender)
+                            }
+                        }
+                        then("yellow") {
+                            executes {
+                                leaveyellow(it.parseArgument("player"), it.sender)
+                            }
+                        }
+                    }
                     then("join") {
                         then("red") {
                             executes {
@@ -58,6 +84,7 @@ internal object CommandBW {
             }
             then("stop") {
                 executes {
+                    Bukkit.getScheduler().cancelTasks(instance)
                     stopprocess(it.sender)
                 }
             }
@@ -96,71 +123,140 @@ internal object CommandBW {
     val blue = arrayListOf<Player>()
     val green = arrayListOf<Player>()
     val yellow = arrayListOf<Player>()
-    private var fakeEntityServer = FakeEntityServer.create(BedWarPlugin.instance).apply {
-        BedWarPlugin.instance.server.pluginManager.registerEvents(object: Listener {
-            @EventHandler
-            fun onJoin(event: PlayerJoinEvent) {
-                addPlayer(event.player)
-            }
-        }, BedWarPlugin.instance)
-        BedWarPlugin.instance.server.scheduler.runTaskTimer(BedWarPlugin.instance, this::update, 0L, 1L)
-        for(onlinePlayer in Bukkit.getOnlinePlayers()) {
-            addPlayer(onlinePlayer)
-        }
-    }
-    private val fakeEntityTimer = arrayListOf<FakeEntity>()
-    lateinit var diamond1: FakeEntity
+    lateinit var emerald1: FakeEntity
+    lateinit var emerald2: FakeEntity
+    lateinit var emerald3: FakeEntity
+    lateinit var emerald4: FakeEntity
+    private lateinit var diamond1: FakeEntity
     lateinit var diamond2: FakeEntity
-    lateinit var diamond3: FakeEntity
+    private lateinit var diamond3: FakeEntity
     lateinit var diamond4: FakeEntity
+    lateinit var diamond5: FakeEntity
+    lateinit var diamond6: FakeEntity
+    lateinit var diamond7: FakeEntity
+    lateinit var diamond8: FakeEntity
     private fun timer() {
         val world: World = Bukkit.getServer().worlds[0]
         val location = Location(world, -0.4, 4.0, 8.5)
         val location2 = Location(world, 17.5, 4.0, 8.5)
         val location3 = Location(world, -0.4, 4.3, 8.5)
         val location4 = Location(world, 17.5, 4.3, 8.5)
-        diamond1 = fakeEntityServer.spawnEntity(location3, ArmorStand::class.java).apply {
-            updateMetadata<ArmorStand> {
-                invisible = true
-                customName = "Diamond"
-                isCustomNameVisible = true
-            }
+        val location5 = Location(world, -30.6, 13.0, 59.6)
+        val location6 = Location(world, -33.5, 9.0, -32.6)
+        val location7 = Location(world, 41.5, 17.0, -29.3)
+        val location8 = Location(world, 58.5, 1.0, 53.4)
+        val loc5 = Location(world, -30.6, 13.3, 59.6)
+        val loc6 = Location(world, -33.5, 9.3, -32.6)
+        val loc7 = Location(world, 41.5, 17.3, -29.3)
+        val loc8 = Location(world, 58.5, 1.3, 53.4)
+        emerald1 = fakeEntityServer.spawnEntity(location3, ArmorStand::class.java)
+        emerald2 = fakeEntityServer.spawnEntity(location, ArmorStand::class.java)
+        emerald3 = fakeEntityServer.spawnEntity(location4, ArmorStand::class.java)
+        emerald4 = fakeEntityServer.spawnEntity(location2, ArmorStand::class.java)
+        diamond1 = fakeEntityServer.spawnEntity(location5, ArmorStand::class.java)
+        diamond2 = fakeEntityServer.spawnEntity(location6, ArmorStand::class.java)
+        diamond3 = fakeEntityServer.spawnEntity(location7, ArmorStand::class.java)
+        diamond4 = fakeEntityServer.spawnEntity(location8, ArmorStand::class.java)
+        diamond5 = fakeEntityServer.spawnEntity(loc5, ArmorStand::class.java)
+        diamond6 = fakeEntityServer.spawnEntity(loc6, ArmorStand::class.java)
+        diamond7 = fakeEntityServer.spawnEntity(loc7, ArmorStand::class.java)
+        diamond8 = fakeEntityServer.spawnEntity(loc8, ArmorStand::class.java)
+        emerald1.updateMetadata<ArmorStand> {
+            customName = "Emerald"
+            isCustomNameVisible = true
+            invisible = true
+            setGravity(false)
         }
-        diamond2 = fakeEntityServer.spawnEntity(location, ArmorStand::class.java).apply {
-            updateMetadata<ArmorStand> {
-                invisible = true
-                isCustomNameVisible = true
-            }
+        emerald2.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
         }
-        diamond3 = fakeEntityServer.spawnEntity(location4, ArmorStand::class.java).apply {
-            updateMetadata<ArmorStand> {
-                invisible = true
-                customName = "Diamond"
-                isCustomNameVisible = true
-            }
+        emerald3.updateMetadata<ArmorStand> {
+            customName = "Emerald"
+            isCustomNameVisible = true
+            invisible = true
+            setGravity(false)
         }
-        diamond4 = fakeEntityServer.spawnEntity(location2, ArmorStand::class.java).apply {
-            updateMetadata<ArmorStand> {
-                invisible = true
-                isCustomNameVisible = true
-            }
+        emerald4.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
         }
-        fakeEntityTimer.add(diamond1)
-        fakeEntityTimer.add(diamond2)
-        fakeEntityTimer.add(diamond3)
-        fakeEntityTimer.add(diamond4)
+        diamond1.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+        }
+        diamond2.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+        }
+        diamond3.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+        }
+        diamond4.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+        }
+        diamond5.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+            customName = "Diamond"
+            isCustomNameVisible = true
+        }
+        diamond6.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+            customName = "Diamond"
+            isCustomNameVisible = true
+        }
+        diamond7.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+            customName = "Diamond"
+            isCustomNameVisible = true
+        }
+        diamond8.updateMetadata<ArmorStand> {
+            invisible = true
+            setGravity(false)
+            customName = "Diamond"
+            isCustomNameVisible = true
+        }
     }
     private fun timerremove() {
-        for(fakeEntities in fakeEntityTimer) {
-            fakeEntities.remove()
-            fakeEntityTimer.remove(fakeEntities)
+        fakeEntityServer.entities.run {
+            for(fakeEntity in this) {
+                fakeEntity.remove()
+            }
         }
+        emerald1.remove()
+        emerald2.remove()
+        emerald3.remove()
+        emerald4.remove()
+        diamond1.remove()
+        diamond2.remove()
+        diamond3.remove()
+        diamond4.remove()
+        diamond5.remove()
+        diamond6.remove()
+        diamond7.remove()
+        diamond8.remove()
     }
     private fun startprocess(sender: CommandSender) {
+        if(Bukkit.getScoreboardManager().mainScoreboard.getObjective("BedWars") != null) {
+            Bukkit.getScoreboardManager().mainScoreboard.getObjective("BedWars")?.unregister()
+        }
+        Bukkit.getScoreboardManager().mainScoreboard.registerNewObjective("BedWars", "dummy", "Bed-Wars")
+        val objective = Bukkit.getScoreboardManager().mainScoreboard.getObjective("BedWars")
+        objective?.displaySlot = DisplaySlot.SIDEBAR
         startProcess()
         sender.sendMessage("game start!")
     }
     private fun stopprocess(sender: CommandSender) {
+        fakeEntityServer.entities.run {
+            for(fakeEntity in this) {
+                fakeEntity.remove()
+            }
+        }
         stopProcess()
         sender.sendMessage("game stop")
     }
@@ -178,6 +274,22 @@ internal object CommandBW {
     }
     private fun joinyellow(player: Player, sender: CommandSender) {
         yellow.add(player)
+        sender.sendFeedback("${player.name}님 옐로우 팀 참가")
+    }
+    private fun leavered(player: Player, sender: CommandSender) {
+        red.remove(player)
+        sender.sendFeedback("${player.name}님 레드 팀 참가")
+    }
+    private fun leaveblue(player: Player, sender: CommandSender) {
+        blue.remove(player)
+        sender.sendFeedback("${player.name}님 블루 팀 참가")
+    }
+    private fun leavegreen(player: Player, sender: CommandSender) {
+        green.remove(player)
+        sender.sendFeedback("${player.name}님 그린 팀 참가")
+    }
+    private fun leaveyellow(player: Player, sender: CommandSender) {
+        yellow.remove(player)
         sender.sendFeedback("${player.name}님 옐로우 팀 참가")
     }
 }

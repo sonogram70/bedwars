@@ -8,6 +8,7 @@ import com.github.devil0414.bedwars.process.BedWarGame.Companion.redBed
 import com.github.devil0414.bedwars.process.BedWarGame.Companion.blueBed
 import com.github.devil0414.bedwars.process.BedWarGame.Companion.greenBed
 import com.github.devil0414.bedwars.process.BedWarGame.Companion.yellowBed
+import com.github.noonmaru.tap.fake.setLocation
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
@@ -17,6 +18,7 @@ import org.bukkit.event.block.BlockDamageEvent
 import org.bukkit.event.block.BlockFadeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 
@@ -32,7 +34,7 @@ class BedWarListener : Listener {
         }
         else if(event.block.type == Material.RED_BED) {
             for(player in CommandBW.red) {
-                if(player == event.player) event.isCancelled = true
+                if(CommandBW.red.contains(event.player)) event.isCancelled = true
                 else {
                     redBed = false
                     player.sendTitle("${ChatColor.RED} Bed Destroyed!", "You can't revive anymore!", 5, 20, 5)
@@ -41,7 +43,7 @@ class BedWarListener : Listener {
         }
         else if(event.block.type == Material.YELLOW_BED) {
             for(player in CommandBW.yellow) {
-                if(player == event.player) event.isCancelled = true
+                if(CommandBW.yellow.contains(event.player)) event.isCancelled = true
                 else {
                     yellowBed = false
                     player.sendTitle("${ChatColor.RED} Bed Destroyed!", "You can't revive anymore", 5, 20, 5)
@@ -50,7 +52,7 @@ class BedWarListener : Listener {
         }
         else if(event.block.type == Material.BLUE_BED) {
             for(player in CommandBW.blue) {
-                if(player == event.player) event.isCancelled = true
+                if(CommandBW.blue.contains(event.player)) event.isCancelled = true
                 else {
                     blueBed = false
                     player.sendTitle("${ChatColor.RED} Bed Destroyed!", "You can't revive anymore", 5, 20, 5)
@@ -59,7 +61,7 @@ class BedWarListener : Listener {
         }
         else if(event.block.type == Material.GREEN_BED) {
             for(player in CommandBW.green) {
-                if(player == event.player) event.isCancelled = true
+                if(CommandBW.green.contains(event.player)) event.isCancelled = true
                 else {
                     greenBed = false
                     player.sendTitle("${ChatColor.RED} Bed Destroyed!", "You can't revive anymore", 5, 20, 5)
@@ -74,18 +76,6 @@ class BedWarListener : Listener {
         }
     }
     @EventHandler
-    fun entityChangeBlock(event: EntityChangeBlockEvent) {
-        event.isCancelled = true
-    }
-    @EventHandler
-    fun blockDamage(event: BlockDamageEvent) {
-        event.isCancelled = true
-    }
-    @EventHandler
-    fun blockFade(event: BlockFadeEvent) {
-        event.isCancelled = true
-    }
-    @EventHandler
     fun entityExplode(event: EntityExplodeEvent) {
         event.isCancelled = true
         Bukkit.getServer().worlds[0].spawnParticle(Particle.EXPLOSION_NORMAL, event.location, 10)
@@ -96,16 +86,13 @@ class BedWarListener : Listener {
             }
         }
     }
-    private var ticks = -1
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
+        event.drops.clear()
+        event.entity.setLocation(Location(world, 8.5, 82.5, 8.4))
         for(player in CommandBW.red) {
             if(redBed) {
                 if(event.entity != player) return
-                event.entity.gameMode == GameMode.ADVENTURE
-                event.entity.allowFlight = true
-                event.entity.inventory.clear()
-                event.entity.isInvisible = true
             } else {
                 if(event.entity != player) return
                 event.entity.gameMode = GameMode.SPECTATOR
@@ -146,11 +133,18 @@ class BedWarListener : Listener {
             event.isCancelled = true
         }
     }
+    val world : World = Bukkit.getWorlds()[0]
     @EventHandler
     fun onPlayerRevive(event: PlayerRespawnEvent) {
+        event.player.gameMode = GameMode.ADVENTURE
+        event.player.allowFlight = true
+        event.player.isInvisible = true
+        event.player.inventory.clear()
+        event.player.teleport(Location(world, 8.5, 82.5, 8.4))
         Bukkit.getScheduler().runTaskTimer(instance, KillCountdown(), 0L, 1L)
     }
     @EventHandler
-    fun onPlayerRevivePost(event: PlayerPostRespawnEvent) {
+    fun onPlayerReviveEvent(event: PlayerPostRespawnEvent) {
+        event.player.setLocation(Location(world, 8.5, 82.5, 8.4))
     }
 }

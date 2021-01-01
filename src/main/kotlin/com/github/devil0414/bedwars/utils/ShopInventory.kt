@@ -8,9 +8,6 @@ import org.bukkit.inventory.ItemStack
 object ShopInventory {
     val inv = Bukkit.createInventory(null, 36, "Shop")
     fun create() {
-        val item = ItemStack(Material.WHITE_WOOL)
-        item.itemMeta.setDisplayName("블럭 메뉴")
-        inv.setItem(10, ItemStack(Material.WHITE_WOOL))
     }
     fun createInv() = InvFX.scene(6, "Shop") {
         panel(0, 0, 9, 5) {

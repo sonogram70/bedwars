@@ -2,6 +2,7 @@ package com.github.devil0414.bedwars.process
 
 import com.github.devil0414.bedwars.plugin.BedWarPlugin.Companion.instance
 import com.github.devil0414.bedwars.tasks.BedWarScheduler
+import com.github.devil0414.bedwars.utils.FakeEntityServ.fakeEntityServer
 import org.bukkit.Bukkit
 import org.bukkit.event.HandlerList.unregisterAll
 
@@ -23,6 +24,12 @@ class BedWarGame() {
         greenBed = true
         yellowBed = true
         gameStatus = false
+        fakeEntityServer.run {
+            for(entity in this.entities) {
+                entity.remove()
+            }
+            clear()
+        }
         unregisterAll(instance)
         Bukkit.getScheduler().cancelTasks(instance)
     }

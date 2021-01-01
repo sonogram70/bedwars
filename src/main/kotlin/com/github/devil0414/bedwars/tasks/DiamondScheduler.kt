@@ -4,6 +4,7 @@ import com.github.devil0414.bedwars.process.CommandBW
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.World
 import org.bukkit.entity.ArmorStand
 import org.bukkit.inventory.ItemStack
 
@@ -12,17 +13,23 @@ class DiamondScheduler: Runnable {
     private var minute = 1
     override fun run() {
         if(ticks > 9) {
-            CommandBW.diamond1.apply {
-                updateMetadata<ArmorStand> {
-                    customName = "$minute : $ticks"
-                }
+            CommandBW.diamond2.updateMetadata<ArmorStand> {
+                customName = "$minute : $ticks"
+                isCustomNameVisible = true
+            }
+            CommandBW.diamond4.updateMetadata<ArmorStand> {
+                customName = "$minute : $ticks"
+                isCustomNameVisible = true
             }
         }
         else if(ticks <= 9) {
-            CommandBW.diamond1.apply {
-                updateMetadata<ArmorStand> {
-                    customName = "$minute : 0$ticks"
-                }
+            CommandBW.diamond2.updateMetadata<ArmorStand> {
+                customName = "$minute : 0$ticks"
+                isCustomNameVisible = true
+            }
+            CommandBW.diamond4.updateMetadata<ArmorStand> {
+                customName = "$minute : 0$ticks"
+                isCustomNameVisible = true
             }
         }
         --ticks
