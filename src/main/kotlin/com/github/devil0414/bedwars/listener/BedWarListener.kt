@@ -124,13 +124,14 @@ class BedWarListener : Listener {
     }
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
-        if(event.player.itemInHand.type == Material.EGG) {
-            val egg = fakeEntityServer.spawnEntity(event.player.location, ArmorStand::class.java)
-            egg.updateMetadata<ArmorStand> {
-                invisible = true
-            }
-            egg.updateEquipment {
-                helmet = ItemStack(Material.EGG)
+        if(event.item?.type == Material.EGG) {
+            val egg = fakeEntityServer.spawnEntity(event.player.location, ArmorStand::class.java).apply {
+                updateMetadata<ArmorStand> {
+                    invisible = true
+                    updateEquipment {
+                        helmet = ItemStack(Material.EGG)
+                    }
+                }
             }
         }
     }
