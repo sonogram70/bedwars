@@ -14,11 +14,6 @@ class BedWarScheduler : Runnable {
     private var bedwarTask: BedWarTask? = null
     init {
         bedwarTask = BedWarTitleTask()
-        for(player in Bukkit.getOnlinePlayers()) {
-            if(player.gameMode == GameMode.SURVIVAL) {
-                player.inventory.setItem(0, ItemStack(Material.WOODEN_SWORD))
-            }
-        }
     }
     override fun run() {
         bedwarTask = bedwarTask?.execute()

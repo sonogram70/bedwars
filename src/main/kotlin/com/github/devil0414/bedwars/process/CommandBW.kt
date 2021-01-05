@@ -101,10 +101,7 @@ internal object CommandBW {
             }
             then("shop") {
                 executes {
-                    val world = Bukkit.getServer().worlds[0]
-                    val location = Location(world, 14.7, 4.0, -53.3)
-                    val shopkeeper = world.spawnEntity(location, EntityType.VILLAGER)
-                    shopkeeper.customName = "shopkeeper"
+                    shop()
                 }
             }
             then("timer") {
@@ -119,6 +116,15 @@ internal object CommandBW {
             }
         }
     }
+    private fun shop() {
+        val world = Bukkit.getServer().worlds[0]
+        val location = Location(world, 14.7, 4.0, -53.3)
+        val location2 = Location(world, 2.3, 4.0, -53.4)
+        val shopkeeper = world.spawnEntity(location, EntityType.VILLAGER)
+        shopkeeper.customName = "shopkeeper"
+        val shopkeeper2 = world.spawnEntity(location2, EntityType.VILLAGER)
+        shopkeeper2.customName = "Upgrade"
+    }
     val red = arrayListOf<Player>()
     val blue = arrayListOf<Player>()
     val green = arrayListOf<Player>()
@@ -127,9 +133,9 @@ internal object CommandBW {
     lateinit var emerald2: FakeEntity
     lateinit var emerald3: FakeEntity
     lateinit var emerald4: FakeEntity
-    private lateinit var diamond1: FakeEntity
+    lateinit var diamond1: FakeEntity
     lateinit var diamond2: FakeEntity
-    private lateinit var diamond3: FakeEntity
+    lateinit var diamond3: FakeEntity
     lateinit var diamond4: FakeEntity
     lateinit var diamond5: FakeEntity
     lateinit var diamond6: FakeEntity
@@ -141,13 +147,13 @@ internal object CommandBW {
         val location2 = Location(world, 17.5, 4.0, 8.5)
         val location3 = Location(world, -0.4, 4.3, 8.5)
         val location4 = Location(world, 17.5, 4.3, 8.5)
-        val location5 = Location(world, -30.6, 13.0, 59.6)
+        val location5 = Location(world, -30.6, 8.0, 59.6)
         val location6 = Location(world, -33.5, 9.0, -32.6)
-        val location7 = Location(world, 41.5, 17.0, -29.3)
+        val location7 = Location(world, 41.5, 12.0, -29.3)
         val location8 = Location(world, 58.5, 1.0, 53.4)
-        val loc5 = Location(world, -30.6, 13.3, 59.6)
+        val loc5 = Location(world, -30.6, 8.3, 59.6)
         val loc6 = Location(world, -33.5, 9.3, -32.6)
-        val loc7 = Location(world, 41.5, 17.3, -29.3)
+        val loc7 = Location(world, 41.5, 12.3, -29.3)
         val loc8 = Location(world, 58.5, 1.3, 53.4)
         emerald1 = fakeEntityServer.spawnEntity(location3, ArmorStand::class.java)
         emerald2 = fakeEntityServer.spawnEntity(location, ArmorStand::class.java)
@@ -249,7 +255,6 @@ internal object CommandBW {
         val objective = Bukkit.getScoreboardManager().mainScoreboard.getObjective("BedWars")
         objective?.displaySlot = DisplaySlot.SIDEBAR
         startProcess()
-        sender.sendMessage("game start!")
     }
     private fun stopprocess(sender: CommandSender) {
         fakeEntityServer.entities.run {
@@ -258,7 +263,6 @@ internal object CommandBW {
             }
         }
         stopProcess()
-        sender.sendMessage("game stop")
     }
     private fun joinred(player: Player, sender: CommandSender) {
         red.add(player)

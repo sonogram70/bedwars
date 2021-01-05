@@ -13,7 +13,15 @@ class DiamondScheduler: Runnable {
     private var minute = 1
     override fun run() {
         if(ticks > 9) {
+            CommandBW.diamond1.updateMetadata<ArmorStand> {
+                customName = "$minute : $ticks"
+                isCustomNameVisible = true
+            }
             CommandBW.diamond2.updateMetadata<ArmorStand> {
+                customName = "$minute : $ticks"
+                isCustomNameVisible = true
+            }
+            CommandBW.diamond3.updateMetadata<ArmorStand> {
                 customName = "$minute : $ticks"
                 isCustomNameVisible = true
             }
@@ -23,7 +31,15 @@ class DiamondScheduler: Runnable {
             }
         }
         else if(ticks <= 9) {
+            CommandBW.diamond1.updateMetadata<ArmorStand> {
+                customName = "$minute : 0$ticks"
+                isCustomNameVisible = true
+            }
             CommandBW.diamond2.updateMetadata<ArmorStand> {
+                customName = "$minute : 0$ticks"
+                isCustomNameVisible = true
+            }
+            CommandBW.diamond3.updateMetadata<ArmorStand> {
                 customName = "$minute : 0$ticks"
                 isCustomNameVisible = true
             }
@@ -39,11 +55,11 @@ class DiamondScheduler: Runnable {
         }
         if(ticks == -1 && minute == 0) {
             val world = Bukkit.getServer().worlds[0]
-            val location = Location(world, 41.5, 17.0, -29.5)
+            val location = Location(world, 41.5, 12.0, -29.5)
             world.dropItem(location, ItemStack(Material.DIAMOND))
             val location2 = Location(world, 58.5, 1.0, 53.5)
             world.dropItem(location2, ItemStack(Material.DIAMOND))
-            val location3 = Location(world, -30.5, 13.0, 59.4)
+            val location3 = Location(world, -30.5, 8.0, 59.4)
             world.dropItem(location3, ItemStack(Material.DIAMOND))
             val location4 = Location(world, -33.5, 9.0, -32.3)
             world.dropItem(location4, ItemStack(Material.DIAMOND))

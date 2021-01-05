@@ -6,7 +6,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
 object ShopInventory {
-    val inv = Bukkit.createInventory(null, 36, "Shop")
+    val inv = Bukkit.createInventory(null, 54, "Shop")
     fun create() {
     }
     fun createInv() = InvFX.scene(6, "Shop") {
@@ -34,6 +34,7 @@ object ShopInventory {
                         if(event.whoClicked.inventory.containsAtLeast(ItemStack(Material.GOLD_INGOT), 3)) {
                             event.whoClicked.inventory.removeItem(ItemStack(Material.GOLD_INGOT, 3))
                             event.whoClicked.inventory.addItem(ItemStack(Material.TNT, 1))
+                            event.whoClicked.inventory.addItem(ItemStack(Material.REDSTONE_BLOCK, 1))
                         }
                     }
                 }

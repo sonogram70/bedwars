@@ -1,17 +1,17 @@
 package com.github.devil0414.bedwars.tasks
 
 import com.github.devil0414.bedwars.listener.BedWarListener
+import com.github.devil0414.bedwars.listener.BedWarShopInteractEvent
 import com.github.devil0414.bedwars.plugin.BedWarPlugin.Companion.instance
 import com.github.devil0414.bedwars.process.BedWarGame.Companion.gameStatus
-import com.github.devil0414.bedwars.listener.BedWarShopInteractEvent
-import com.github.devil0414.bedwars.listener.BedWarShopListener
 import com.github.devil0414.bedwars.process.CommandBW
 import org.bukkit.Bukkit
 import org.bukkit.Bukkit.getPluginManager
 import org.bukkit.Bukkit.getScheduler
 import org.bukkit.GameMode
 import org.bukkit.Location
-import org.bukkit.entity.Player
+import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 
 class BedWarGameTask : BedWarTask {
     private var ticks = -1
@@ -21,6 +21,10 @@ class BedWarGameTask : BedWarTask {
             for(player in Bukkit.getOnlinePlayers()) {
                 player.isInvisible = false
                 player.gameMode = GameMode.SURVIVAL
+                player.inventory.clear()
+                if(player.gameMode == GameMode.SURVIVAL) {
+                    player.inventory.setItem(0, ItemStack(Material.WOODEN_SWORD))
+                }
             }
             for(red in CommandBW.red) {
                 red.teleport(Location(red.world, 8.5, 4.0, -50.5))
@@ -35,7 +39,6 @@ class BedWarGameTask : BedWarTask {
                 yellow.teleport(Location(yellow.world, 8.5, 4.0, 67.5))
             }
             getPluginManager().registerEvents(BedWarShopInteractEvent(), instance)
-            getPluginManager().registerEvents(BedWarShopListener(), instance)
             getPluginManager().registerEvents(BedWarListener(), instance)
             getScheduler().runTaskTimer(instance, IronScheduler(), 0L, 15L)
             getScheduler().runTaskTimer(instance, GoldScheduler(), 0L, 100L)
