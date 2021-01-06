@@ -1,6 +1,5 @@
 package com.github.devil0414.bedwars.process
 
-import com.github.devil0414.bedwars.plugin.BedWarPlugin
 import com.github.devil0414.bedwars.plugin.BedWarPlugin.Companion.instance
 import com.github.devil0414.bedwars.process.BedWarProcess.startProcess
 import com.github.devil0414.bedwars.process.BedWarProcess.stopProcess
@@ -8,10 +7,9 @@ import com.github.devil0414.bedwars.utils.FakeEntityServ.fakeEntityServer
 import com.github.devil0414.bedwars.utils.ShopInventory
 import com.github.noonmaru.invfx.openWindow
 import com.github.noonmaru.kommand.KommandBuilder
-import com.github.noonmaru.kommand.argument.PlayerArgument
+import com.github.noonmaru.kommand.argument.playerTarget
 import com.github.noonmaru.kommand.sendFeedback
 import com.github.noonmaru.tap.fake.FakeEntity
-import com.github.noonmaru.tap.fake.FakeEntityServer
 import com.github.noonmaru.tap.fake.invisible
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -20,17 +18,13 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scoreboard.DisplaySlot
 
 internal object CommandBW {
     fun register(builder: KommandBuilder) {
         builder.apply {
             then("team") {
-                then("player" to PlayerArgument) {
+                then("player" to playerTarget()) {
                     then("leave") {
                         then("red") {
                             executes {

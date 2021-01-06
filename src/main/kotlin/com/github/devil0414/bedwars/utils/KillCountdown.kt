@@ -1,4 +1,4 @@
-package com.github.devil0414.bedwars.listener
+package com.github.devil0414.bedwars.utils
 
 import com.github.devil0414.bedwars.process.CommandBW.blue
 import com.github.devil0414.bedwars.process.CommandBW.green

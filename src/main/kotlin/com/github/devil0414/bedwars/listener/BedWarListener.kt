@@ -3,8 +3,9 @@ package com.github.devil0414.bedwars.listener
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import com.github.devil0414.bedwars.plugin.BedWarPlugin.Companion.instance
 import com.github.devil0414.bedwars.process.CommandBW
+import com.github.devil0414.bedwars.utils.EggBridgeScheduler
 import com.github.devil0414.bedwars.utils.FakeEntityServ.fakeEntityServer
-import com.github.devil0414.bedwars.utils.Manager
+import com.github.devil0414.bedwars.utils.KillCountdown
 import com.github.devil0414.bedwars.utils.Manager.blocks
 import com.github.devil0414.bedwars.utils.Manager.blueBed
 import com.github.devil0414.bedwars.utils.Manager.greenBed
@@ -14,7 +15,6 @@ import com.github.noonmaru.kommand.sendFeedback
 import com.github.noonmaru.tap.fake.invisible
 import org.bukkit.*
 import com.github.noonmaru.tap.fake.setLocation
-import org.bukkit.block.Block
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
@@ -22,7 +22,6 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.*
 import org.bukkit.event.entity.*
-import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerRespawnEvent
@@ -133,6 +132,7 @@ class BedWarListener : Listener {
                     }
                 }
             }
+            Bukkit.getScheduler().runTaskTimer(instance, EggBridgeScheduler(egg), 0L, 1L)
         }
     }
     @EventHandler
