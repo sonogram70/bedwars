@@ -2,6 +2,7 @@ package com.github.devil0414.bedwars.process
 
 import com.github.devil0414.bedwars.plugin.BedWarPlugin.Companion.instance
 import com.github.devil0414.bedwars.tasks.BedWarScheduler
+import com.github.devil0414.bedwars.utils.BedWar
 import com.github.devil0414.bedwars.utils.FakeEntityServ
 import com.github.devil0414.bedwars.utils.FakeEntityServ.fakeEntityServer
 import com.github.devil0414.bedwars.utils.Manager.blocks
@@ -40,5 +41,6 @@ class BedWarGame() {
         unregisterAll(instance)
         Bukkit.getScheduler().cancelTasks(instance)
         FakeEntityServ.initialize(instance)
+        BedWar().initialize(instance)
     }
 }

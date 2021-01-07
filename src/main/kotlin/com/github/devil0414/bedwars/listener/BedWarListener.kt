@@ -3,8 +3,9 @@ package com.github.devil0414.bedwars.listener
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent
 import com.github.devil0414.bedwars.plugin.BedWarPlugin.Companion.instance
 import com.github.devil0414.bedwars.process.CommandBW
-import com.github.devil0414.bedwars.utils.EggBridgeScheduler
-import com.github.devil0414.bedwars.utils.FakeEntityServ.fakeEntityServer
+import com.github.devil0414.bedwars.utils.BedWar
+import com.github.devil0414.bedwars.utils.EggBridge
+import com.github.devil0414.bedwars.utils.EggBridgeProjectile
 import com.github.devil0414.bedwars.utils.KillCountdown
 import com.github.devil0414.bedwars.utils.Manager.blocks
 import com.github.devil0414.bedwars.utils.Manager.blueBed
@@ -12,10 +13,8 @@ import com.github.devil0414.bedwars.utils.Manager.greenBed
 import com.github.devil0414.bedwars.utils.Manager.redBed
 import com.github.devil0414.bedwars.utils.Manager.yellowBed
 import com.github.noonmaru.kommand.sendFeedback
-import com.github.noonmaru.tap.fake.invisible
 import org.bukkit.*
 import com.github.noonmaru.tap.fake.setLocation
-import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -25,9 +24,9 @@ import org.bukkit.event.entity.*
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerRespawnEvent
-import org.bukkit.inventory.ItemStack
 
 class BedWarListener : Listener {
+    private var eggBridge: EggBridge? = null
     @EventHandler
     fun blockExplode(event: BlockExplodeEvent) {
         event.isCancelled = true
@@ -124,15 +123,13 @@ class BedWarListener : Listener {
     @EventHandler
     fun onInteract(event: PlayerInteractEvent) {
         if(event.item?.type == Material.EGG) {
-            val egg = fakeEntityServer.spawnEntity(event.player.location, ArmorStand::class.java).apply {
-                updateMetadata<ArmorStand> {
-                    invisible = true
-                    updateEquipment {
-                        helmet = ItemStack(Material.EGG)
-                    }
-                }
+            eggBridge = EggBridge(event.player.eyeLocation)
+            eggBridge?.let { eggBridge ->
+                val projectile = EggBridgeProjectile(event.player, eggBridge)
+                BedWar().launchProjectile(event.player.eyeLocation, projectile)
+                projectile.velocity = event.player.location.direction.multiply(2.0)
+                this.eggBridge = null
             }
-            Bukkit.getScheduler().runTaskTimer(instance, EggBridgeScheduler(egg), 0L, 1L)
         }
     }
     @EventHandler
